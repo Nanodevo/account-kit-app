@@ -6,6 +6,10 @@ import {
 import { alchemy, sepolia } from "@account-kit/infra"; // Using sepolia from @account-kit/infra
 import { QueryClient } from "@tanstack/react-query";
 
+// Use environment variables with fallbacks for local development
+const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "";
+const WALLET_CONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "";
+
 const uiConfig: AlchemyAccountsUIConfig = {
   illustrationStyle: "outline",
   auth: {
@@ -26,7 +30,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
         {
           type: "external_wallets",
           walletConnect: { 
-            projectId: "1c7aac0d63797e2247521c31294e1826" // Make sure this is a valid WalletConnect project ID
+            projectId: WALLET_CONNECT_PROJECT_ID
           },
         },
       ],
@@ -37,7 +41,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
 
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "unNFcLrZfdMcZp2TngJdFx1PhnX2eqI-" }),
+    transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
     chain: sepolia,
     ssr: false, // Set to false to avoid hydration issues
     storage: cookieStorage,
