@@ -1,16 +1,14 @@
-import { config } from "@/config";
-import { cookieToInitialState } from "@account-kit/core";
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { headers } from "next/headers";
 import "./globals.css";
 import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Account Kit Quickstart",
-  description: "Account Kit Quickstart NextJS Template",
+  title: "Account Kit App",
+  description: "A demo using Alchemy Account Kit",
 };
 
 export default function RootLayout({
@@ -18,17 +16,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Persist state across pages
-  // https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
-  const initialState = cookieToInitialState(
-    config,
-    headers().get("cookie") ?? undefined
-  );
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers initialState={initialState}>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

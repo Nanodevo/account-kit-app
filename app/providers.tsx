@@ -1,19 +1,25 @@
 "use client";
 import { config, queryClient } from "@/config";
-import { AlchemyClientState } from "@account-kit/core";
+import { AlchemyClientState, cookieToInitialState } from "@account-kit/core";
 import { AlchemyAccountProvider } from "@account-kit/react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 
-export const Providers = (
-  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
-) => {
+export const Providers = (props: PropsWithChildren) => {
+  const [initialState, setInitialState] = useState<AlchemyClientState | undefined>(undefined);
+
+  // Handle client-side cookie parsing
+  useEffect(() => {
+    const state = cookieToInitialState(config, document.cookie);
+    setInitialState(state);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AlchemyAccountProvider
         config={config}
         queryClient={queryClient}
-        initialState={props.initialState}
+        initialState={initialState}
       >
         {props.children}
       </AlchemyAccountProvider>

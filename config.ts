@@ -3,23 +3,31 @@ import {
   cookieStorage,
   createConfig,
 } from "@account-kit/react";
-import { alchemy, sepolia } from "@account-kit/infra";
+import { alchemy, sepolia } from "@account-kit/infra"; // Using sepolia from @account-kit/infra
 import { QueryClient } from "@tanstack/react-query";
 
 const uiConfig: AlchemyAccountsUIConfig = {
   illustrationStyle: "outline",
   auth: {
     sections: [
-      [{ type: "email" }],
       [
-        { type: "passkey" },
-        { type: "social", authProviderId: "google", mode: "popup" },
-        { type: "social", authProviderId: "facebook", mode: "popup" },
+        {
+          type: "social",
+          authProviderId: "auth0",
+          mode: "popup",
+          auth0Connection: "twitter", 
+          displayName: "X",
+          logoUrl: "/images/twitter.svg",
+          logoUrlDark: "/images/twitter-dark.svg",
+          scope: "openid profile",
+        },
       ],
       [
         {
           type: "external_wallets",
-          walletConnect: { projectId: "your-project-id" },
+          walletConnect: { 
+            projectId: "1c7aac0d63797e2247521c31294e1826" // Make sure this is a valid WalletConnect project ID
+          },
         },
       ],
     ],
@@ -29,11 +37,11 @@ const uiConfig: AlchemyAccountsUIConfig = {
 
 export const config = createConfig(
   {
-    transport: alchemy({ apiKey: "ALCHEMY_API_KEY" }), // TODO: add your Alchemy API key - https://dashboard.alchemy.com/accounts
+    transport: alchemy({ apiKey: "unNFcLrZfdMcZp2TngJdFx1PhnX2eqI-" }),
     chain: sepolia,
-    ssr: true, // more about ssr: https://accountkit.alchemy.com/react/ssr
-    storage: cookieStorage, // more about persisting state with cookies: https://accountkit.alchemy.com/react/ssr#persisting-the-account-state
-    enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
+    ssr: false, // Set to false to avoid hydration issues
+    storage: cookieStorage,
+    enablePopupOauth: true,
   },
   uiConfig
 );
